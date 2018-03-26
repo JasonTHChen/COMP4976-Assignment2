@@ -17,11 +17,6 @@ namespace LmycWeb.Data
             using (var context = new ApplicationDbContext(
                 serviceProvider.GetRequiredService<DbContextOptions<ApplicationDbContext>>()))
             {
-                // For sample purposes we are seeding 2 users both with the same password.
-                // The password is set with the following command:
-                // dotnet user-secrets set SeedUserPW <pw>
-                // The admin user can do anything
-
                 var admin = new ApplicationUser
                 {
                     UserName = "a",
@@ -69,6 +64,8 @@ namespace LmycWeb.Data
                 {
                     context.Boats.Add(b);
                 }
+
+                context.SaveChanges();
             }
         }
 
