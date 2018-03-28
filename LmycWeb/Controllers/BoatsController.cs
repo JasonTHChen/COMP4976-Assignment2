@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using LmycWeb.Data;
 using LmycWeb.Models.BoatClub;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LmycWeb.Controllers
 {
+    [Authorize(Roles = "Member, Admin")]
     public class BoatsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -27,6 +29,7 @@ namespace LmycWeb.Controllers
         }
 
         // GET: Boats/Details/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -46,6 +49,7 @@ namespace LmycWeb.Controllers
         }
 
         // GET: Boats/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             ViewData["CreatedBy"] = new SelectList(_context.Users, "Id", "Id");
@@ -55,6 +59,7 @@ namespace LmycWeb.Controllers
         // POST: Boats/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("BoatId,BoatName,Picture,LengthInFeet,Make,Year")] Boat boat)
@@ -70,6 +75,7 @@ namespace LmycWeb.Controllers
         }
 
         // GET: Boats/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -91,6 +97,7 @@ namespace LmycWeb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id, [Bind("BoatId,BoatName,Picture,LengthInFeet,Make,Year")] Boat boat)
         {
             if (id != boat.BoatId)
@@ -123,6 +130,7 @@ namespace LmycWeb.Controllers
         }
 
         // GET: Boats/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -144,6 +152,7 @@ namespace LmycWeb.Controllers
         // POST: Boats/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var boat = await _context.Boats.SingleOrDefaultAsync(m => m.BoatId == id);
