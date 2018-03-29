@@ -138,7 +138,7 @@ namespace LmycWeb.Controllers
             if (identityRole.Name.Equals("Admin") || identityRole == null)
             {
                 return NotFound();
-            }
+            }   
 
             var users = _userManager.GetUsersInRoleAsync(identityRole.Name).Result;
 

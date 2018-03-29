@@ -1,0 +1,47 @@
+﻿@model IEnumerable<LmycWeb.Models.BoatClub.Reservation>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Boat.BoatName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StartDateTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EndDateTime)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Boat.BoatName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StartDateTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EndDateTime)
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.ReservationId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.ReservationId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
