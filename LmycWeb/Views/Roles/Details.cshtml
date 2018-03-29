@@ -2,10 +2,8 @@
 @{
     ViewData["Title"] = "Detail";
 }
-
 <h2>Role</h2>
 <h4>@Html.DisplayFor(model => model.RoleName)</h4>
-
 <table class="table">
     <thead>
         <tr>
@@ -41,21 +39,22 @@
                     @Html.DisplayFor(modelItem => item.FirstName)
                 </td>
                 <td>
-                    @using (Html.BeginForm("Remove", "Roles", FormMethod.Post))
+                    @if (!item.UserName.Equals("a"))
                     {
-                        <input type="hidden" asp-for="RoleId" />
-                        <input type="hidden" asp-for="RoleName" />
-                        <input type="hidden" asp-for="UserId" value="@item.Id" />
-                        <input type="submit" value="Remove" class="btn btn-link" />
+                        @using (Html.BeginForm("Remove", "Roles", FormMethod.Post))
+                        {
+                            <input type="hidden" asp-for="RoleId" />
+                            <input type="hidden" asp-for="RoleName" />
+                            <input type="hidden" asp-for="UserId" value="@item.Id" />
+                            <input type="submit" value="Remove" class="btn btn-link" />
+                        }
                     }
                 </td>
             </tr>
         }
     </tbody>
 </table>
-
 <div>
     <a asp-action="Edit" asp-route-id="@Model.RoleId">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
-

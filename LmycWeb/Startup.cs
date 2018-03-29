@@ -39,6 +39,12 @@ namespace LmycWeb
             services.AddTransient<IEmailSender, EmailSender>();
 
             services.AddMvc();
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("RequireLogin", policy => policy.RequireRole("Admin", "Member"));
+                options.AddPolicy("RequireAdmin", policy => policy.RequireRole("Admin"));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

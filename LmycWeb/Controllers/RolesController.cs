@@ -4,13 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using LmycWeb.Data;
 using LmycWeb.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace LmycWeb.Controllers
 {
+    [Authorize(Policy = "RequireAdmin")]
     public class RolesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -134,7 +135,7 @@ namespace LmycWeb.Controllers
 
             var identityRole = await _roleManager.FindByIdAsync(id);
 
-            if (identityRole == null)
+            if (identityRole.Name.Equals("Admin") || identityRole == null)
             {
                 return NotFound();
             }
@@ -157,6 +158,12 @@ namespace LmycWeb.Controllers
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
             var role = await _roleManager.FindByIdAsync(id);
+
+            if (role.Name.Equals("Admin") || role == null)
+            {
+                return NotFound();
+            }
+
             var result = await _roleManager.DeleteAsync(role);
 
             if (!result.Succeeded)
@@ -191,7 +198,7 @@ namespace LmycWeb.Controllers
         {
             var user = await _userManager.FindByIdAsync(model.UserId);
 
-            if (user == null)
+            if (user.UserName.Equals("a") || user == null)
             {
                 return NotFound();
             }
