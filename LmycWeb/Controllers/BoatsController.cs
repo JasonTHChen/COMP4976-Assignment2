@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using LmycWeb.Data;
 using LmycWeb.Models.BoatClub;
 using Microsoft.AspNetCore.Authorization;
+using LmycWeb.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace LmycWeb.Controllers
 {
@@ -15,10 +17,12 @@ namespace LmycWeb.Controllers
     public class BoatsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public BoatsController(ApplicationDbContext context)
+        public BoatsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Boats
@@ -29,7 +33,6 @@ namespace LmycWeb.Controllers
         }
 
         // GET: Boats/Details/5
-        [Authorize(Policy = "RequireAdmin")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -61,10 +64,12 @@ namespace LmycWeb.Controllers
         [Authorize(Policy = "RequireAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("BoatId,BoatName,Picture,LengthInFeet,Make,Year")] Boat boat)
+        public async Task<IActionResult> Create([Bind("BoatName,Picture,LengthInFeet,Make,Year")] Boat boat)
         {
             if (ModelState.IsValid)
             {
+                var user = await _userManager.GetUserAsync(User);
+                boat.User = user ?? throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
                 _context.Add(boat);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
