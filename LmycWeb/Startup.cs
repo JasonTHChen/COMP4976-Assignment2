@@ -104,7 +104,7 @@ namespace LmycWeb
 
             app.UseStaticFiles();
 
-            app.UseCors(builder => builder.WithOrigins("https://comp4976-lmycassignment.azurewebsites.net");
+            app.UseCors(builder => builder.WithOrigins("https://comp4976-lmycassignment.azurewebsites.net").AllowAnyHeader());
 
             app.UseAuthentication();
 
