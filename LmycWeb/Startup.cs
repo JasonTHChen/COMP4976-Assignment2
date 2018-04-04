@@ -29,6 +29,8 @@ namespace LmycWeb
         {
             services.AddMvc();
 
+            services.AddCors();
+
             services.AddDbContext<ApplicationDbContext>(options =>
             {
                 // local database
@@ -101,6 +103,8 @@ namespace LmycWeb
             }
 
             app.UseStaticFiles();
+
+            app.UseCors(builder => builder.WithOrigins("https://comp4976-lmycassignment.azurewebsites.net");
 
             app.UseAuthentication();
 
