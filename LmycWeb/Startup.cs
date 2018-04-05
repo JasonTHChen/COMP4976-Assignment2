@@ -83,7 +83,7 @@ namespace LmycWeb
 
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("RequireLogin", policy => policy.RequireRole("Admin", "Member"));
+                options.AddPolicy("RequireLogin", policy => policy.RequireAuthenticatedUser());
                 options.AddPolicy("RequireAdmin", policy => policy.RequireRole("Admin"));
             });
         }
