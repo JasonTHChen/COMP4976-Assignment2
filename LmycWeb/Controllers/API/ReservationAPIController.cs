@@ -8,12 +8,14 @@ using Microsoft.EntityFrameworkCore;
 using LmycWeb.Data;
 using LmycWeb.Models.BoatClub;
 using Microsoft.AspNetCore.Authorization;
+using AspNet.Security.OAuth.Validation;
+using LmycWeb.Models;
 
 namespace LmycWeb.Controllers.API
 {
     [Produces("application/json")]
     [Route("api/ReservationAPI")]
-	[Authorize]
+    [Authorize(Policy = "RequireLogin", AuthenticationSchemes = OAuthValidationDefaults.AuthenticationScheme)]
     public class ReservationAPIController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -101,7 +103,7 @@ namespace LmycWeb.Controllers.API
 
         // DELETE: api/ReservationAPI/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteReservation([FromRoute] int id)
+        public async Task<IActionResult> DeleteReservation([FromRoute] int id, [FromRoute] ApplicationUser user)
         {
             if (!ModelState.IsValid)
             {
@@ -109,7 +111,7 @@ namespace LmycWeb.Controllers.API
             }
 
             var reservation = await _context.Reservations.SingleOrDefaultAsync(m => m.ReservationId == id);
-            if (reservation == null)
+            if (reservation == null || !reservation.User.UserName.Equals(user.UserName))
             {
                 return NotFound();
             }
