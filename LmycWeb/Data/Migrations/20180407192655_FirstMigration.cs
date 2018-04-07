@@ -1,14 +1,92 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 using System;
 using System.Collections.Generic;
 
 namespace LmycWeb.Data.Migrations
 {
-    public partial class Reservation_Migration : Migration
+    public partial class FirstMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropIndex(
+                name: "IX_AspNetUserRoles_UserId",
+                table: "AspNetUserRoles");
+
+            migrationBuilder.DropIndex(
+                name: "RoleNameIndex",
+                table: "AspNetRoles");
+
+            migrationBuilder.AddColumn<string>(
+                name: "City",
+                table: "AspNetUsers",
+                nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "Country",
+                table: "AspNetUsers",
+                nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "FirstName",
+                table: "AspNetUsers",
+                nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "LastName",
+                table: "AspNetUsers",
+                nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "MobileNumber",
+                table: "AspNetUsers",
+                nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "PostalCode",
+                table: "AspNetUsers",
+                nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "Province",
+                table: "AspNetUsers",
+                nullable: true);
+
+            migrationBuilder.AddColumn<double>(
+                name: "SailingExperience",
+                table: "AspNetUsers",
+                nullable: false,
+                defaultValue: 0.0);
+
+            migrationBuilder.AddColumn<string>(
+                name: "Street",
+                table: "AspNetUsers",
+                nullable: true);
+
+            migrationBuilder.CreateTable(
+                name: "Boats",
+                columns: table => new
+                {
+                    BoatId = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    BoatName = table.Column<string>(nullable: false),
+                    CreatedBy = table.Column<string>(nullable: true),
+                    CreationDate = table.Column<DateTime>(nullable: false),
+                    LengthInFeet = table.Column<double>(nullable: false),
+                    Make = table.Column<string>(nullable: true),
+                    Picture = table.Column<string>(nullable: true),
+                    Year = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Boats", x => x.BoatId);
+                    table.ForeignKey(
+                        name: "FK_Boats_AspNetUsers_CreatedBy",
+                        column: x => x.CreatedBy,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateTable(
                 name: "OpenIddictApplications",
                 columns: table => new
@@ -52,7 +130,7 @@ namespace LmycWeb.Data.Migrations
                 columns: table => new
                 {
                     ReservationId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("Sqlite:Autoincrement", true),
                     BoatId = table.Column<int>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
                     EndDateTime = table.Column<DateTime>(nullable: false),
@@ -134,6 +212,17 @@ namespace LmycWeb.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "RoleNameIndex",
+                table: "AspNetRoles",
+                column: "NormalizedName",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Boats_CreatedBy",
+                table: "Boats",
+                column: "CreatedBy");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_OpenIddictApplications_ClientId",
                 table: "OpenIddictApplications",
                 column: "ClientId",
@@ -164,8 +253,7 @@ namespace LmycWeb.Data.Migrations
                 name: "IX_OpenIddictTokens_ReferenceId",
                 table: "OpenIddictTokens",
                 column: "ReferenceId",
-                unique: true,
-                filter: "[ReferenceId] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Reservations_BoatId",
@@ -176,10 +264,22 @@ namespace LmycWeb.Data.Migrations
                 name: "IX_Reservations_CreatedBy",
                 table: "Reservations",
                 column: "CreatedBy");
+
+            //migrationBuilder.AddForeignKey(
+            //    name: "FK_AspNetUserTokens_AspNetUsers_UserId",
+            //    table: "AspNetUserTokens",
+            //    column: "UserId",
+            //    principalTable: "AspNetUsers",
+            //    principalColumn: "Id",
+            //    onDelete: ReferentialAction.Cascade);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            //migrationBuilder.DropForeignKey(
+            //    name: "FK_AspNetUserTokens_AspNetUsers_UserId",
+            //    table: "AspNetUserTokens");
+
             migrationBuilder.DropTable(
                 name: "OpenIddictScopes");
 
@@ -193,7 +293,60 @@ namespace LmycWeb.Data.Migrations
                 name: "OpenIddictAuthorizations");
 
             migrationBuilder.DropTable(
+                name: "Boats");
+
+            migrationBuilder.DropTable(
                 name: "OpenIddictApplications");
+
+            migrationBuilder.DropIndex(
+                name: "RoleNameIndex",
+                table: "AspNetRoles");
+
+            migrationBuilder.DropColumn(
+                name: "City",
+                table: "AspNetUsers");
+
+            migrationBuilder.DropColumn(
+                name: "Country",
+                table: "AspNetUsers");
+
+            migrationBuilder.DropColumn(
+                name: "FirstName",
+                table: "AspNetUsers");
+
+            migrationBuilder.DropColumn(
+                name: "LastName",
+                table: "AspNetUsers");
+
+            migrationBuilder.DropColumn(
+                name: "MobileNumber",
+                table: "AspNetUsers");
+
+            migrationBuilder.DropColumn(
+                name: "PostalCode",
+                table: "AspNetUsers");
+
+            migrationBuilder.DropColumn(
+                name: "Province",
+                table: "AspNetUsers");
+
+            migrationBuilder.DropColumn(
+                name: "SailingExperience",
+                table: "AspNetUsers");
+
+            migrationBuilder.DropColumn(
+                name: "Street",
+                table: "AspNetUsers");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUserRoles_UserId",
+                table: "AspNetUserRoles",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "RoleNameIndex",
+                table: "AspNetRoles",
+                column: "NormalizedName");
         }
     }
 }

@@ -33,10 +33,12 @@ namespace LmycWeb
 
             services.AddDbContext<ApplicationDbContext>(options =>
             {
+                // sqlite
+                options.UseSqlite(Configuration.GetConnectionString("SqliteConnection"));
                 // local database
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
                 // test database
-               //options.UseSqlServer(Configuration.GetConnectionString("TestConnection"));
+                //options.UseSqlServer(Configuration.GetConnectionString("TestConnection"));
                 options.UseOpenIddict();
             });
 
