@@ -36,7 +36,7 @@ namespace LmycWeb.Controllers
                 throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
-            var applicationDbContext = _context.Reservations.Include(r => r.Boat).Where(r => r.User.UserName == user.UserName);
+            var applicationDbContext = _context.Reservations.Include(r => r.Boat).Include(r => r.User);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -165,7 +165,16 @@ namespace LmycWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            
             var reservation = await _context.Reservations.SingleOrDefaultAsync(m => m.ReservationId == id);
+
+            var user = await _userManager.GetUserAsync(User);
+
+            if (!reservation.CreatedBy.Equals(user.Id))
+            {
+                return BadRequest();
+            }
+
             _context.Reservations.Remove(reservation);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
