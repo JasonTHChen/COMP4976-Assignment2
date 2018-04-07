@@ -12,26 +12,26 @@ using Microsoft.AspNetCore.Authorization;
 namespace LmycWeb.Controllers.API
 {
     [Produces("application/json")]
-    [Route("api/RegisterAPI")]
+    [Route("api/ReservationAPI")]
 	[Authorize]
-    public class RegisterAPIController : Controller
+    public class ReservationAPIController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public RegisterAPIController(ApplicationDbContext context)
+        public ReservationAPIController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: api/RegisterAPI
+        // GET: api/ReservationAPI
         [HttpGet]
         public IEnumerable<Reservation> GetReservations()
         {
             return _context.Reservations;
         }
 
-        // GET: api/RegisterAPI/5
-        [HttpGet("{id}")]
+		// GET: api/ReservationAPI/5
+		[HttpGet("{id}")]
         public async Task<IActionResult> GetReservation([FromRoute] int id)
         {
             if (!ModelState.IsValid)
@@ -49,8 +49,8 @@ namespace LmycWeb.Controllers.API
             return Ok(reservation);
         }
 
-        // PUT: api/RegisterAPI/5
-        [HttpPut("{id}")]
+		// PUT: api/ReservationAPI/5
+		[HttpPut("{id}")]
         public async Task<IActionResult> PutReservation([FromRoute] int id, [FromBody] Reservation reservation)
         {
             if (!ModelState.IsValid)
@@ -84,8 +84,8 @@ namespace LmycWeb.Controllers.API
             return NoContent();
         }
 
-        // POST: api/RegisterAPI
-        [HttpPost]
+		// POST: api/ReservationAPI
+		[HttpPost]
         public async Task<IActionResult> PostReservation([FromBody] Reservation reservation)
         {
             if (!ModelState.IsValid)
@@ -99,7 +99,7 @@ namespace LmycWeb.Controllers.API
             return CreatedAtAction("GetReservation", new { id = reservation.ReservationId }, reservation);
         }
 
-        // DELETE: api/RegisterAPI/5
+        // DELETE: api/ReservationAPI/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteReservation([FromRoute] int id)
         {
