@@ -34,9 +34,9 @@ namespace LmycWeb
             services.AddDbContext<ApplicationDbContext>(options =>
             {
                 // local database
-                //options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
                 // test database
-                options.UseSqlServer(Configuration.GetConnectionString("TestConnection"));
+               //options.UseSqlServer(Configuration.GetConnectionString("TestConnection"));
                 options.UseOpenIddict();
             });
 
