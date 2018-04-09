@@ -29,7 +29,7 @@ namespace LmycWeb.Controllers.API
         [HttpGet]
         public IEnumerable<Reservation> GetReservations()
         {
-            return _context.Reservations;
+            return _context.Reservations.Include(r => r.Boat).Include(r => r.User);
         }
 
 		// GET: api/ReservationAPI/5
